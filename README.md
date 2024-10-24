@@ -6,6 +6,12 @@ This Python bot automates the process of logging into your Instagram account and
 <p align="center">
   <img src="https://i.imgur.com/uoJtnP6.png" alt="InstaHashBot Logo" width="250"/>
 </p>
+<p align="center">
+  <a href="https://github.com/EbookFoundation/free-programming-books/stargazers">
+    <img src="https://img.shields.io/github/forks/SimpliAj/InstaHashBot?style=flat&logo=github&logoColor=whitesmoke&label=Forks" alt="GitHub repo stars"/>
+    <img src="https://img.shields.io/github/stars/SimpliAj/InstaHashBot?style=flat&logo=github&logoColor=whitesmoke&label=Stars" alt="GitHub repo stars"/>
+  </a>
+</p>
 
 ## Features
 
