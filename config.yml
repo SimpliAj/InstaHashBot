@@ -1,0 +1,26 @@
+
+instagram:
+  username: "your_instagram_username"
+  password: "your_instagram_password"
+
+settings:
+  max_follows: 5               # Maximum number of users to follow per hashtag
+  min_followers: 100            # Minimum number of followers a user must have
+  min_following: 50             # Minimum number of accounts the user must be following
+
+hashtags:
+  - "webdevelopment"
+  - "programming"
+  - "python"
+
+blacklist:
+  - "user_to_ignore1"
+  - "user_to_ignore2"
+
+telegram:
+  bot_token: "your_telegram_bot_token"
+  chat_id: "your_telegram_chat_id"
+
+discord:
+  bot_token: "your_discord_bot_token"
+  channel_id: "your_discord_channel_id"
