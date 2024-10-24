@@ -3,6 +3,10 @@
 
 This Python bot automates the process of logging into your Instagram account and following users based on specific hashtags. It includes options to set a minimum threshold for followers and following counts, and allows you to blacklist certain users. The bot can also send notifications to Telegram and Discord, keeping you updated on its actions.
 
+<p align="center">
+  <img src="https://i.imgur.com/uoJtnP6.png" alt="InstaHashBot Logo" width="250"/>
+</p>
+
 ## Features
 
 - Follows users based on specified hashtags.
