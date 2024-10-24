@@ -93,7 +93,7 @@ discord:
 Once everything is configured, you can run the bot by executing:
 
 ```bash
-python your_bot_script.py
+python instagram_bot.py.py
 ```
 
 The bot will log into your Instagram account, search for users using the specified hashtags, and follow users based on the configured rules.
