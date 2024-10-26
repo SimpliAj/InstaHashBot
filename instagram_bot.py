@@ -1,3 +1,4 @@
+
 import yaml
 import json
 import time
@@ -7,6 +8,7 @@ import telegram
 import discord
 import asyncio
 import os
+import requests
 
 # Function to read YAML configuration file
 def load_config(file_path='config.yml'):
@@ -41,11 +43,7 @@ follow_timeframe_hours = config['settings']['follow_timeframe_hours']
 unfollow_after_hours = config['settings']['unfollow_after_hours']
 hashtags = config['hashtags']
 blacklist = config['blacklist']
-
-# Initialize follow tracking variables
-follow_count = 0
-follow_start_time = datetime.now()
-followed_users = load_followed_users()
+current_version = config['settings']['version']
 
 # Telegram bot info
 telegram_token = config['telegram']['bot_token']
@@ -79,6 +77,29 @@ class MyDiscordClient(discord.Client):
 
 # Initialize the Discord client
 discord_client = MyDiscordClient()
+
+# Version Check Function
+def check_for_new_version(current_version, repo="SimpliAj/InstaHashBot"):
+    try:
+        response = requests.get(f"https://api.github.com/repos/{repo}/releases/latest")
+        if response.status_code == 200:
+            latest_release = response.json()
+            latest_version = latest_release.get("tag_name", "0.0.0")
+
+            # Compare versions
+            if latest_version > current_version:
+                return True, latest_version, latest_release.get("html_url")
+        return False, None, None
+    except Exception as e:
+        print(f"Error checking for new version: {e}")
+        return False, None, None
+
+# Function to notify user of the new version
+def notify_new_version(new_version, url):
+    message = f"A new version {new_version} of the bot is available! Check it out: {url}"
+    print(message)
+    send_telegram_message(message)
+    asyncio.run(discord_client.send_message(message))
 
 # Function to check if the follow limit has been reached
 def can_follow():
@@ -168,6 +189,12 @@ async def start_discord_bot():
 
 # Main process to follow/unfollow users and notify on both platforms
 async def main():
+    # Version check
+    is_new_version, new_version, release_url = check_for_new_version(current_version, repo="SimpliAj/InstaHashBot")
+    
+    if is_new_version:
+        notify_new_version(new_version, release_url)
+    
     # Start the Discord client in the background
     discord_task = asyncio.create_task(start_discord_bot())
 
