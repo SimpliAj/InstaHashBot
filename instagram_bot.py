@@ -1,5 +1,6 @@
-
 import yaml
+import time
+from datetime import datetime, timedelta
 from instagrapi import Client
 import telegram
 import discord
@@ -20,8 +21,14 @@ password = config['instagram']['password']
 max_follows = config['settings']['max_follows']
 min_followers = config['settings']['min_followers']
 min_following = config['settings']['min_following']
+follow_limit = config['settings']['follow_limit']
+follow_timeframe_hours = config['settings']['follow_timeframe_hours']
 hashtags = config['hashtags']
 blacklist = config['blacklist']
+
+# Initialize follow tracking variables
+follow_count = 0
+follow_start_time = datetime.now()
 
 # Telegram bot info
 telegram_token = config['telegram']['bot_token']
@@ -56,13 +63,32 @@ class MyDiscordClient(discord.Client):
 # Initialize the Discord client
 discord_client = MyDiscordClient()
 
+# Function to check if the follow limit has been reached
+def can_follow():
+    global follow_count, follow_start_time
+    current_time = datetime.now()
+    elapsed_time = (current_time - follow_start_time).total_seconds() / 3600  # Convert to hours
+    
+    # Reset count if the time frame has passed
+    if elapsed_time >= follow_timeframe_hours:
+        follow_count = 0
+        follow_start_time = current_time
+    
+    return follow_count < follow_limit
+
 # Function to follow users by hashtag
 def follow_users_by_hashtag(hashtag, max_follows=10, min_followers=0, min_following=0, blacklist=[]):
+    global follow_count
+
     # Search for media by hashtag
     medias = client.hashtag_medias_top(hashtag, amount=max_follows)
     
     followed_users = []
     for media in medias:
+        if not can_follow():
+            print("Follow limit reached, waiting for the next timeframe.")
+            break
+        
         user = media.user
 
         # Skip blacklisted users
@@ -77,6 +103,7 @@ def follow_users_by_hashtag(hashtag, max_follows=10, min_followers=0, min_follow
         if user_info.follower_count >= min_followers and user_info.following_count >= min_following:
             client.user_follow(user.pk)
             followed_users.append(user.username)
+            follow_count += 1  # Increment the follow count
             message = f"Followed: {user.username} (Followers: {user_info.follower_count}, Following: {user_info.following_count})"
             print(message)
             send_telegram_message(message)
