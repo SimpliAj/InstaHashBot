@@ -8,6 +8,7 @@ settings:
   min_following: 50             # Minimum number of accounts the user must be following
   follow_limit: 20              # Maximum number of accounts to follow within the time frame
   follow_timeframe_hours: 24    # Time frame in hours to limit the number of follows
+  unfollow_after_hours: 48      # Time in hours after which followed users will be unfollowed
 
 hashtags:
   - "webdevelopment"
