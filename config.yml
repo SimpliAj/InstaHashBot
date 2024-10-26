@@ -1,3 +1,4 @@
+
 instagram:
   username: "your_instagram_username"
   password: "your_instagram_password"
@@ -22,12 +23,8 @@ blacklist:
 
 telegram:
   bot_token: "your_telegram_bot_token"
-  chat_ids:
-    - "your_telegram_chat_id1"
-    - "your_telegram_chat_id2"
+  chat_id: "your_telegram_chat_id"
 
 discord:
   bot_token: "your_discord_bot_token"
-  channel_ids:
-    - "your_discord_channel_id1"
-    - "your_discord_channel_id2"
+  channel_id: "your_discord_channel_id"
