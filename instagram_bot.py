@@ -1,16 +1,31 @@
 import yaml
+import json
 import time
 from datetime import datetime, timedelta
 from instagrapi import Client
 import telegram
 import discord
 import asyncio
+import os
 
 # Function to read YAML configuration file
 def load_config(file_path='config.yml'):
     with open(file_path, 'r') as file:
         config = yaml.safe_load(file)
     return config
+
+# Function to load or initialize the followed users file
+def load_followed_users(file_path='followed_users.json'):
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
+            return json.load(file)
+    else:
+        return {}
+
+# Function to save the followed users to a JSON file
+def save_followed_users(followed_users, file_path='followed_users.json'):
+    with open(file_path, 'w') as file:
+        json.dump(followed_users, file)
 
 # Load configuration
 config = load_config()
@@ -23,12 +38,14 @@ min_followers = config['settings']['min_followers']
 min_following = config['settings']['min_following']
 follow_limit = config['settings']['follow_limit']
 follow_timeframe_hours = config['settings']['follow_timeframe_hours']
+unfollow_after_hours = config['settings']['unfollow_after_hours']
 hashtags = config['hashtags']
 blacklist = config['blacklist']
 
 # Initialize follow tracking variables
 follow_count = 0
 follow_start_time = datetime.now()
+followed_users = load_followed_users()
 
 # Telegram bot info
 telegram_token = config['telegram']['bot_token']
@@ -78,12 +95,12 @@ def can_follow():
 
 # Function to follow users by hashtag
 def follow_users_by_hashtag(hashtag, max_follows=10, min_followers=0, min_following=0, blacklist=[]):
-    global follow_count
+    global follow_count, followed_users
 
     # Search for media by hashtag
     medias = client.hashtag_medias_top(hashtag, amount=max_follows)
     
-    followed_users = []
+    followed_list = []
     for media in medias:
         if not can_follow():
             print("Follow limit reached, waiting for the next timeframe.")
@@ -102,8 +119,16 @@ def follow_users_by_hashtag(hashtag, max_follows=10, min_followers=0, min_follow
         # Only follow if they meet the min_followers and min_following criteria
         if user_info.follower_count >= min_followers and user_info.following_count >= min_following:
             client.user_follow(user.pk)
-            followed_users.append(user.username)
             follow_count += 1  # Increment the follow count
+            followed_list.append(user.username)
+            
+            # Save the followed user with a timestamp
+            followed_users[user.username] = {
+                "user_id": user.pk,
+                "followed_at": datetime.now().isoformat()
+            }
+            save_followed_users(followed_users)
+
             message = f"Followed: {user.username} (Followers: {user_info.follower_count}, Following: {user_info.following_count})"
             print(message)
             send_telegram_message(message)
@@ -114,13 +139,34 @@ def follow_users_by_hashtag(hashtag, max_follows=10, min_followers=0, min_follow
             send_telegram_message(message)
             asyncio.run(discord_client.send_message(message))
     
-    return followed_users
+    return followed_list
+
+# Function to unfollow users after the specified time
+def unfollow_old_users():
+    global followed_users
+    current_time = datetime.now()
+
+    users_to_unfollow = [
+        username for username, info in followed_users.items()
+        if (current_time - datetime.fromisoformat(info["followed_at"])).total_seconds() / 3600 >= unfollow_after_hours
+    ]
+
+    for username in users_to_unfollow:
+        user_id = followed_users[username]["user_id"]
+        client.user_unfollow(user_id)
+        del followed_users[username]
+        save_followed_users(followed_users)
+
+        message = f"Unfollowed: {username} after {unfollow_after_hours} hours."
+        print(message)
+        send_telegram_message(message)
+        asyncio.run(discord_client.send_message(message))
 
 # Run the Discord bot asynchronously
 async def start_discord_bot():
     await discord_client.start(discord_token)
 
-# Main process to follow users and notify on both platforms
+# Main process to follow/unfollow users and notify on both platforms
 async def main():
     # Start the Discord client in the background
     discord_task = asyncio.create_task(start_discord_bot())
@@ -138,6 +184,9 @@ async def main():
         summary_message = f"Finished processing hashtag: #{hashtag}. Total followed users: {len(followed_users)}"
         send_telegram_message(summary_message)
         await discord_client.send_message(summary_message)
+
+    # Unfollow users that meet the time condition
+    unfollow_old_users()
 
     # Ensure the Discord bot runs until it's manually stopped
     await discord_task
