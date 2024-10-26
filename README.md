@@ -41,7 +41,7 @@ pip install PyYAML instagrapi python-telegram-bot discord.py
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/SimpliAj/instagram-hashtag-bot.git
+git clone https://github.com/SimpliAj/instahashbot.git
 cd instagram-hashtag-bot
 ```
 
