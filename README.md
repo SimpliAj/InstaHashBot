@@ -37,22 +37,22 @@ This Python bot automates the process of logging into your Instagram account and
 
 Install the required Python libraries:
 
-\`\`\`bash
+```bash
 pip install PyYAML instagrapi python-telegram-bot discord.py requests
-\`\`\`
+```
 
 ### Clone the Repository
 
-\`\`\`bash
+```bash
 git clone https://github.com/SimpliAj/InstaHashBot.git
 cd InstaHashBot
-\`\`\`
+```
 
 ### Configure Your Bot
 
 Update the \`config.yml\` file with your Instagram login details, Telegram/Discord bot tokens, and other settings.
 
-\`\`\`yaml
+```yaml
 instagram:
   username: "your_instagram_username"
   password: "your_instagram_password"
@@ -82,7 +82,7 @@ telegram:
 discord:
   bot_token: "your_discord_bot_token"
   channel_id: "your_discord_channel_id"
-\`\`\`
+```
 
 ### Telegram Bot Setup (Optional)
 
@@ -99,9 +99,9 @@ discord:
 
 Once everything is configured, you can run the bot by executing:
 
-\`\`\`bash
-python main.py
-\`\`\`
+```bash
+python instagram_bot.py
+```
 
 The bot will log into your Instagram account, search for users using the specified hashtags, and follow users based on the configured rules. It will also unfollow users after the set period and check for updates on GitHub.
 
