@@ -1,4 +1,3 @@
-
 instagram:
   username: "your_instagram_username"
   password: "your_instagram_password"
@@ -7,6 +6,8 @@ settings:
   max_follows: 5               # Maximum number of users to follow per hashtag
   min_followers: 100            # Minimum number of followers a user must have
   min_following: 50             # Minimum number of accounts the user must be following
+  follow_limit: 20              # Maximum number of accounts to follow within the time frame
+  follow_timeframe_hours: 24    # Time frame in hours to limit the number of follows
 
 hashtags:
   - "webdevelopment"
