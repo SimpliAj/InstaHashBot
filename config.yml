@@ -1,8 +1,10 @@
+
 instagram:
   username: "your_instagram_username"
   password: "your_instagram_password"
 
 settings:
+  version: "1.0.0"             # Current version of the bot
   max_follows: 5               # Maximum number of users to follow per hashtag
   min_followers: 100            # Minimum number of followers a user must have
   min_following: 50             # Minimum number of accounts the user must be following
