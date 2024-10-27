@@ -10,6 +10,10 @@ settings:
   follow_limit: 20              # Maximum number of accounts to follow within the time frame
   follow_timeframe_hours: 24    # Time frame in hours to limit the number of follows
   unfollow_after_hours: 48      # Time in hours after which followed users will be unfollowed
+  auto_like: true               # Enable or disable auto-liking posts
+  auto_comment: true            # Enable or disable auto-commenting on posts
+  max_likes_per_day: 50         # Maximum number of posts to like per day
+  max_comments_per_day: 30      # Maximum number of posts to comment on per day
 
 hashtags:
   - "webdevelopment"
@@ -20,6 +24,13 @@ blacklist:
   - "user_to_ignore1"
   - "user_to_ignore2"
 
+comments:
+  - "Awesome post! 😊"
+  - "Really cool content, keep it up! 👍"
+  - "Loved your recent post! 🔥"
+  - "Great stuff, thanks for sharing! 👌"
+  - "This is amazing, well done! 👏"
+
 telegram:
   enabled: true                 # Enable or disable Telegram bot
   bot_token: "your_telegram_bot_token"
@@ -29,12 +40,11 @@ telegram:
 
 discord:
   enabled: true                 # Enable or disable Discord bot
+  use_webhook: false            # If true, use Discord webhook instead of bot
   bot_token: "your_discord_bot_token"
   channel_ids:
     - "your_discord_channel_id1"
     - "your_discord_channel_id2"
-  
-  use_webhook: false            # If true, use Discord webhook instead of bot
   webhook_url: "your_discord_webhook_url" # Discord webhook URL if using webhook
   webhook_name: "InstaHashBot"  # Custom name for Discord webhook bot
   webhook_avatar_url: "https://example.com/bot_image.png" # Custom image URL for Discord webhook bot
