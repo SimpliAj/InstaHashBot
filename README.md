@@ -58,7 +58,7 @@ Update the `config.yml` file with your Instagram login details, Telegram/Discord
 Once everything is configured, you can run the bot by executing:
 
 ```bash
-python main.py
+python instagram_bot.py
 ```
 
 The bot will log into your Instagram account, search for users using the specified hashtags, and follow, like, and comment based on the configured rules.
