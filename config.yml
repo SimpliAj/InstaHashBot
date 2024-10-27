@@ -1,10 +1,9 @@
-
 instagram:
   username: "your_instagram_username"
   password: "your_instagram_password"
 
 settings:
-  version: "1.0.0"             # Current version of the bot
+  version: "0.0.2"             # Current version of the bot
   max_follows: 5               # Maximum number of users to follow per hashtag
   min_followers: 100            # Minimum number of followers a user must have
   min_following: 50             # Minimum number of accounts the user must be following
@@ -22,9 +21,20 @@ blacklist:
   - "user_to_ignore2"
 
 telegram:
+  enabled: true                 # Enable or disable Telegram bot
   bot_token: "your_telegram_bot_token"
-  chat_id: "your_telegram_chat_id"
+  chat_ids:
+    - "your_telegram_chat_id1"
+    - "your_telegram_chat_id2"
 
 discord:
+  enabled: true                 # Enable or disable Discord bot
   bot_token: "your_discord_bot_token"
-  channel_id: "your_discord_channel_id"
+  channel_ids:
+    - "your_discord_channel_id1"
+    - "your_discord_channel_id2"
+  
+  use_webhook: false            # If true, use Discord webhook instead of bot
+  webhook_url: "your_discord_webhook_url" # Discord webhook URL if using webhook
+  webhook_name: "InstaHashBot"  # Custom name for Discord webhook bot
+  webhook_avatar_url: "https://example.com/bot_image.png" # Custom image URL for Discord webhook bot
